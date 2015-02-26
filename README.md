@@ -1,4 +1,5 @@
 # scalding2spark
+<pre>
 Migrate from Scalding (aka TypedPipe ) to Spark (aka RDD ), or vice-versa
 
 NOTES: sc = Spark Context, rdd = RDD, typedpipe = TypedPipe, Tsv = Tab separated File, CC = case class
@@ -32,4 +33,23 @@ LIST2RDD ( Convert local Scala list to an RDD )
 6. sc.parallelize( list ) <-> TypedPipe.from(list).flatMap{ x=> x } // need this additional flatmap in Scalding
 
 INNER JOIN
-7. pipe1.groupBy( x=> x.key }.join(pipe2.groupBy{ x=> x.key })
+7. new PairRDDFunctions(brdd.groupBy{ x=> x.key }).join(ardd.groupBy{ x=> x.key})
+<->
+pipe1.groupBy( x=> x.key }.join(pipe2.groupBy{ x=> x.key })
+
+LEFT JOIN
+8.new PairRDDFunctions(brdd.groupBy{ x=> x.key }).leftOuterjoin(ardd.groupBy{ x=> x.key})
+<->
+pipe1.groupBy( x=> x.key }.leftJoin(pipe2.groupBy{ x=> x.key })
+
+CARTESIAN PRODUCT
+9. ardd.cartesian(brdd) <-> pipe1.cross(pipe2)
+
+CATAMORPHISM
+10. ardd.fold(init){(a,b) => op(a,b) }  <-> pipe1.groupAll.foldLeft(init){ (a,b) => op(a,b) }
+
+DISTINCT
+11. rdd.distinct <-> pipe.groupAll.distinct
+
+
+
