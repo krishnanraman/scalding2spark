@@ -36,7 +36,7 @@ typedpipe.groupAll.size
 
 6. LIST2RDD ( Convert local Scala list to an RDD )
 sc.parallelize( list )
-TypedPipe.from(list).flatMap{ x=> x } // need this additional flatmap in Scalding
+TypedPipe.from(list)
 
 7. INNER JOIN
 new PairRDDFunctions(brdd.groupBy{ x=> x.key }).join(ardd.groupBy{ x=> x.key})
