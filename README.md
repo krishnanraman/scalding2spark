@@ -51,5 +51,5 @@ CATAMORPHISM
 DISTINCT
 11. rdd.distinct <-> pipe.groupAll.distinct
 
-
+</pre>
 
