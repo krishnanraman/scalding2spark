@@ -2,7 +2,7 @@
 <pre>
 Migrate from Scalding (aka TypedPipe ) to Spark (aka RDD ), or vice-versa
 
-NOTES: sc = Spark Context, rdd = RDD, typedpipe = TypedPipe, Tsv = Tab separated File, CC = case class
+NOTES: sc = Spark Context, rdd = RDD, pipe = TypedPipe, Tsv = Tab separated File, CC = case class
 
 IMPORTS:
 Scalding:
@@ -16,11 +16,11 @@ import org.apache.spark.rdd._
 
 1. CONVERT RDD to local lazy list
 rdd.toLocalIterator.toStream
-typedpipe.toIterableExecution.waitFor.toStream
+pipe.toIterableExecution.waitFor.toStream
 
 2. SAVE RDD to filesystem as plaintext
 rdd.saveAsTextFile("foo")
-typedpipe.write(TypedTsv[String]("foo"))
+pipe.write(TypedTsv[String]("foo"))
 
 3. READ RDD from a plaintext file
 sc.textFile("foo", 4).cache().map{ x:String => CC(str) }
@@ -28,7 +28,7 @@ TextLine("foo").read.map('line -> 'line) { x: String => CC(x) }.toTypedPipe[CC](
 
 4. MAP, FLATMAP, FILTER ( Identical API )
 rdd.map, rdd.flatMap, rdd.filter
-typedpipe.map, typedpipe.flatMap, typedpipe.filter
+pipe.map, pipe.flatMap, pipe.filter
 
 5. SIZE
 rdd.count
@@ -51,8 +51,8 @@ ardd.cartesian(brdd)
 pipe1.cross(pipe2)
 
 10. CATAMORPHISM
-ardd.fold(init){(a,b) => op(a,b) }
-pipe1.groupAll.foldLeft(init){ (a,b) => op(a,b) }
+rdd.fold(init){(a,b) => op(a,b) }
+pipe.groupAll.foldLeft(init){ (a,b) => op(a,b) }
 
 12. DISTINCT
 rdd.distinct
