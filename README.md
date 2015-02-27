@@ -28,7 +28,7 @@ pipe.write(TypedTsv[String]("foo"))
 
 3. READ RDD from a plaintext file
 sc.textFile("foo", 4).cache().map{ x:String => CC(str) }
-TextLine("foo").read.map('line -> 'line) { x: String => CC(x) }.toTypedPipe[CC]('line)
+TypedPipe.from(TextLine("foo")).map{ x: String => CC(x) }
 
 4. MAP, FLATMAP, FILTER ( Identical API )
 rdd.map, rdd.flatMap, rdd.filter
