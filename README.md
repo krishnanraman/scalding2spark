@@ -43,11 +43,13 @@ sc.parallelize( list )
 TypedPipe.from(list)
 
 7. INNER JOIN
-new PairRDDFunctions(brdd.groupBy{ x=> x.key }).join(ardd.groupBy{ x=> x.key})
+import org.apache.spark.SparkContext._ ( for implicit conversion of RDD to PairRDDFunctions)
+brdd.groupBy{ x=> x.key }.join(ardd.groupBy{ x=> x.key})
 pipe1.groupBy( x=> x.key }.join(pipe2.groupBy{ x=> x.key })
 
 8. LEFT JOIN
-new PairRDDFunctions(brdd.groupBy{ x=> x.key }).leftOuterjoin(ardd.groupBy{ x=> x.key})
+import org.apache.spark.SparkContext._ ( for implicit conversion of RDD to PairRDDFunctions)
+brdd.groupBy{ x=> x.key }.leftOuterjoin(ardd.groupBy{ x=> x.key})
 pipe1.groupBy( x=> x.key }.leftJoin(pipe2.groupBy{ x=> x.key })
 
 9. CARTESIAN PRODUCT
