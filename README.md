@@ -30,8 +30,8 @@ pipe.write(TypedTsv[String]("foo"))
 sc.textFile("foo", 4).cache().map{ x:String => CC(str) }
 TypedPipe.from(TextLine("foo")).map{ x: String => CC(x) }
 For multiple files -
-sc.textFile("foo*", 4).cache().map{ x:String => CC(str) } => will combine all files starting with name foo, into a single RDD
-MultipleTextLineFiles(files: _*).read => will combine all files in the files list, into a single TypedPipe
+sc.textFile("foo*", 4).cache().map{ x:String => CC(str) } => will combine all files starting with name foo, into a single RDD[String]
+MultipleTextLineFiles(listOfFiles: _*).read.toTypedPipe[String]('line) => will combine all files in the listOfFiles ( of type List[String]), into a single TypedPipe[String]
 
 4. MAP, FLATMAP, FILTER ( Identical API )
 rdd.map, rdd.flatMap, rdd.filter
