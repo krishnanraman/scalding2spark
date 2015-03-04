@@ -71,9 +71,9 @@ pipe.groupBy{ x => x.key }.foldLeft(init){ (a,b) => op(a,b) }
 rdd.distinct
 pipe.groupAll.distinct
 
-13. VALUES FROM JOIN
-pairedRDD.values
-joinedPipe.values
+13. VALUES FROM A (Key,Value) PIPE, TYPICALLY AFTER A JOIN, OR TO UNDO A GROUPBY
+pairedRDD.values.flatMap{ x=>x } gives you an RDD[V]  (skipping the flatMap gives you an RDD[Iterable[V]])
+joinedPipe.values gives you a TypedPipe[V]
 
 14. TAKE
 rdd.take(n)
