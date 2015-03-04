@@ -18,8 +18,12 @@ import org.apache.spark.SparkContext._
 import org.apache.spark.rdd._
 
 API:
+0. LOOK AT WHAT'S INSIDE ( if small enough )
+rdd.collect
+pipe.dump
+
 1. CONVERT RDD to local lazy list
-rdd.toLocalIterator.toStream
+rdd.toLocalIterator.toStream, rdd.collect.toStream ( collect returns an Array, use for small RDDs only )
 pipe.toIterableExecution.waitFor(Config.default, Local(true)).get.toStream
 
 2. SAVE RDD to filesystem as plaintext
@@ -82,7 +86,9 @@ val gpd = pipe.groupBy{ x=> x}
 gpd.join(gpd).values gives you an absolute mess - RDD(Iterable[Int], Iterable[Int])
 What you expect to get is RDD[(Int,Int)]
 So you have to flatMap & zip !
-gpd.join(gpd).flatMap{ x=> x._1.zip(x._2) } => this does the right thing.
+gpd.join(gpd).values.flatMap{ x=> x._1.zip(x._2) } => this does the right thing FOR INNER JOINS ONLY.
+Alternately ( FOR LEFT JOINS )
+gpd.join(gpd).values.map{ x=> if (x._2.size > 0) (x._1.head, Some(x._2.get.head)) else (x._1.head, None) }
 
 Now, Scalding. Say you have a
 val pipe:TypedPipe[Int]
