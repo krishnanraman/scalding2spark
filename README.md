@@ -76,8 +76,7 @@ rdd.distinct
 pipe.groupAll.distinct
 
 13. VALUES FROM A (Key,Value) PIPE, TYPICALLY AFTER A JOIN, OR TO UNDO A GROUPBY
-pairedRDD.values.flatMap{ x=>x } gives you an RDD[V]  SEE NOTES BELOW.
-joinedPipe.values gives you a TypedPipe[V]
+
 
 NOTES on Spark vs Scalding:
 
