@@ -80,20 +80,40 @@ pairedRDD.values.flatMap{ x=>x } gives you an RDD[V]  SEE NOTES BELOW.
 joinedPipe.values gives you a TypedPipe[V]
 
 NOTES on Spark vs Scalding:
-First, Spark. Say you have a 
-val pipe:RDD[Int]
-val gpd = pipe.groupBy{ x=> x}
-gpd.join(gpd).values gives you an absolute mess - RDD(Iterable[Int], Iterable[Int])
-What you expect to get is RDD[(Int,Int)]
-So you have to flatMap & zip !
-gpd.join(gpd).values.flatMap{ x=> x._1.zip(x._2) } => this does the right thing FOR INNER JOINS ONLY.
-Alternately ( FOR LEFT JOINS )
-gpd.join(gpd).values.map{ x=> if (x._2.size > 0) (x._1.head, Some(x._2.get.head)) else (x._1.head, None) }
 
-Now, Scalding. Say you have a
+First, Scalding. Say you have a
 val pipe:TypedPipe[Int]
 val gpd = pipe.groupBy{ x=> x}
-gpd.join(gpd).values gives you TypedPipe[(Int,Int)] - which is exactly what you expect !!!
+
+Innerjoin:
+gpd.join(gpd).values 
+gives you TypedPipe[(Int,Int)] - which is exactly what you expect !!!
+
+Leftjoin:
+gpd.leftJoin(gpd).values
+gives you TypedPipe[(Int,Option[Int])] - which is exactly what you expect !!!
+
+Now, Spark.
+Say you have a 
+val pipe:RDD[Int]
+val gpd = pipe.groupBy{ x=> x}
+
+Innerjoin:
+gpd.join(gpd).values 
+gives you RDD(Iterable[Int], Iterable[Int]) !!!
+What you expect to get is RDD[(Int,Int)]
+
+So you have to flatMap & zip !
+gpd.join(gpd).values.flatMap{ x=> x._1.zip(x._2) }
+So this does the right thing, but FOR INNER JOINS ONLY.
+
+Left Join:
+gpd.leftOuterJoin(gpd).values.map{ x=> 
+if (x._2.size > 0) (x._1.head, Some(x._2.get.head)) else (x._1.head, None) 
+}
+So that gives you an RDD[(Int, Option[Int])]
+
+Would welcome a simpler way to get to RDD[(Int, Option[Int])]
 
 14. TAKE
 rdd.take(n)
