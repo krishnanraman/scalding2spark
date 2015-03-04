@@ -72,8 +72,22 @@ rdd.distinct
 pipe.groupAll.distinct
 
 13. VALUES FROM A (Key,Value) PIPE, TYPICALLY AFTER A JOIN, OR TO UNDO A GROUPBY
-pairedRDD.values.flatMap{ x=>x } gives you an RDD[V]  (skipping the flatMap gives you an RDD[Iterable[V]])
+pairedRDD.values.flatMap{ x=>x } gives you an RDD[V]  SEE NOTES BELOW.
 joinedPipe.values gives you a TypedPipe[V]
+
+NOTES on Spark vs Scalding:
+First, Spark. Say you have a 
+val pipe:RDD[Int]
+val gpd = pipe.groupBy{ x=> x}
+gpd.join(gpd).values gives you an absolute mess - RDD(Iterable[Int], Iterable[Int])
+What you expect to get is RDD[(Int,Int)]
+So you have to flatMap & zip !
+gpd.join(gpd).flatMap{ x=> x._1.zip(x._2) } => this does the right thing.
+
+Now, Scalding. Say you have a
+val pipe:TypedPipe[Int]
+val gpd = pipe.groupBy{ x=> x}
+gpd.join(gpd).values gives you TypedPipe[(Int,Int)] - which is exactly what you expect !!!
 
 14. TAKE
 rdd.take(n)
