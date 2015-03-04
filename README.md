@@ -52,7 +52,7 @@ pipe1.groupBy( x=> x.key }.join(pipe2.groupBy{ x=> x.key })
 
 8. LEFT JOIN
 import org.apache.spark.SparkContext._ ( for implicit conversion of RDD to PairRDDFunctions)
-brdd.groupBy{ x=> x.key }.leftOuterjoin(ardd.groupBy{ x=> x.key})
+brdd.groupBy{ x=> x.key }.leftOuterJoin(ardd.groupBy{ x=> x.key})
 pipe1.groupBy( x=> x.key }.leftJoin(pipe2.groupBy{ x=> x.key })
 
 9. CARTESIAN PRODUCT
@@ -62,6 +62,10 @@ pipe1.cross(pipe2)
 10. CATAMORPHISM
 rdd.fold(init){(a,b) => op(a,b) }
 pipe.groupAll.foldLeft(init){ (a,b) => op(a,b) }
+
+if you have keys
+rdd.foldByKey(init){(a,b) => op(a,b) }
+pipe.groupBy{ x => x.key }.foldLeft(init){ (a,b) => op(a,b) }
 
 12. DISTINCT
 rdd.distinct
