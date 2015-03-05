@@ -73,7 +73,7 @@ pipe.groupBy{ x => x.key }.foldLeft(init){ (a,b) => op(a,b) }
 
 12. DISTINCT
 rdd.distinct
-pipe.groupAll.distinct
+pipe.distinct
 
 13. VALUES FROM A (Key,Value) PIPE, TYPICALLY AFTER A JOIN, OR TO UNDO A GROUPBY
 
