@@ -77,6 +77,7 @@ pipe.distinct
 
 13. VALUES FROM A (Key,Value) PIPE, TYPICALLY AFTER A JOIN, OR TO UNDO A GROUPBY
 
+SEE: http://stackoverflow.com/questions/28233405/how-to-flatten-list-inside-rdd
 
 NOTES on Spark vs Scalding:
 
